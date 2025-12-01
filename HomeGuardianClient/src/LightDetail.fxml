@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="light1controller">
+   <top>
+      <AnchorPane prefHeight="113.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="301.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Screenshot%202025-10-20%20095707.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lightTitleLabel" layoutX="46.0" layoutY="26.0" text="LIGHT 1" textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman" size="33.0" />
+               </font>
+            </Label>
+            <Label layoutX="46.0" layoutY="85.0" text="Adjust Brightness level : " textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <ToggleButton fx:id="motionToggleButton" layoutX="461.0" layoutY="134.0" mnemonicParsing="false" onAction="#motionToggleButtonPressed" style="-fx-background-radius: 20; -fx-text-fill: white; -fx-padding: 5 20; -fx-background-color: green;" text="Turn on " />
+            <Slider fx:id="brightnessSlider" blockIncrement="1.0" layoutX="46.0" layoutY="127.0" onMouseDragged="#brightnessSliderMoved" prefWidth="236.0" value="1.0" />
+            <ColorPicker fx:id="colorPicker" layoutX="43.0" layoutY="205.0" onAction="#colorPickerChanged" />
+            <Label layoutX="46.0" layoutY="163.0" text="Pick color" textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="46.0" layoutY="259.0" text="Set Time Out Duration: " textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <Slider fx:id="timeoutSlider" layoutX="46.0" layoutY="299.0" onMouseDragged="#timeoutSliderMoved" prefWidth="236.0" />
+            <Label layoutX="460.0" layoutY="36.0" text="MOTION SENSOR FUNCTIONS " textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="461.0" layoutY="205.0" text="Adjust Motion Sensitivity : " textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <Slider fx:id="motionSensitivitySlider" layoutX="461.0" layoutY="252.0" onMouseDragged="#motionSensitivitySliderMoved" prefWidth="236.0" />
+            <Label layoutX="461.0" layoutY="85.0" text="Toggle Motion Sensor" textFill="#4a4a4a">
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="brightnessTextField" layoutX="218.0" layoutY="82.0" onAction="#brightnessTextFieldTyped" prefHeight="25.0" prefWidth="62.0" promptText="\%" />
+            <TextField fx:id="timeoutTextField" layoutX="218.0" layoutY="256.0" onAction="#timeoutTextFieldTyped" prefHeight="25.0" prefWidth="62.0" promptText="minutes" />
+            <TextField fx:id="motionSensitivityField" layoutX="650.0" layoutY="202.0" onAction="#motionSensitivityFieldTyped" prefHeight="25.0" prefWidth="62.0" promptText="\%" />
+         </children>
+      </AnchorPane>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="90.0" prefWidth="800.0" style="-fx-background-color: #d18ee2; -fx-border-color: #ac6cbd; -fx-border-width: 8;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="logoutButton" layoutX="667.0" layoutY="28.0" mnemonicParsing="false" onAction="#logoutButtonPressed" prefHeight="35.0" prefWidth="96.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="mainMenuButton" layoutX="25.0" layoutY="28.0" mnemonicParsing="false" onAction="#mainMenuButtonPressed" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Main Menu" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="activityLogButton" layoutX="232.0" layoutY="28.0" mnemonicParsing="false" onAction="#activityLogButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Activity Log " textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="devicesButton" layoutX="125.0" layoutY="28.0" mnemonicParsing="false" onAction="#devicesButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Devices" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="settingsButton" layoutX="344.0" layoutY="28.0" mnemonicParsing="false" onAction="#settingsButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Settings" textFill="WHITE">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
