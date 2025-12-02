@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="649.0" fitWidth="366.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Screenshot%202025-10-19%20210325.png" />
+                  <Image url="@Screenshot%202025-10-19%20210325.png" />
                </image>
             </ImageView>
          </children>

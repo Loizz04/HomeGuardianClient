@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="alarmController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="alarmController ">
    <top>
       <AnchorPane prefHeight="113.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="301.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Screenshot%202025-10-20%20095707.png" />
+                  <Image url="@Screenshot%202025-10-20%20095707.png" />
                </image>
             </ImageView>
          </children>
@@ -34,7 +34,7 @@
             <ToggleButton fx:id="alarm3ToggleButton" layoutX="577.0" layoutY="281.0" mnemonicParsing="false" onAction="#alarm3ToggleButtonPressed" style="-fx-background-radius: 20; -fx-text-fill: white; -fx-padding: 5 20; -fx-background-color: green;" text="Turn on " />
             <ImageView fx:id="alarm1Button" fitHeight="145.0" fitWidth="146.0" layoutX="109.0" layoutY="124.0" onMouseClicked="#alarm1ButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../alarm.png" />
+                  <Image url="@alarm.png" />
                </image>
             </ImageView>
             <Label layoutX="154.0" layoutY="96.0" text="Alarm 1" textFill="#4a4a4a">
@@ -49,12 +49,12 @@
             </Label>
             <ImageView fx:id="alarm2Button" fitHeight="145.0" fitWidth="146.0" layoutX="328.0" layoutY="124.0" onMouseClicked="#alarm2ButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../alarm.png" />
+                  <Image url="@alarm.png" />
                </image>
             </ImageView>
             <ImageView fx:id="alarm3Button" fitHeight="145.0" fitWidth="146.0" layoutX="547.0" layoutY="124.0" onMouseClicked="#alarm3ButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../alarm.png" />
+                  <Image url="@alarm.png" />
                </image>
             </ImageView>
             <Label layoutX="591.0" layoutY="96.0" text="Alarm 3" textFill="#4a4a4a">

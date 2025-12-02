@@ -85,7 +85,7 @@ public class LockDetailController extends homeGuardianClientController {
 
     @FXML
     void settingsButtonPressed(ActionEvent event) {
-        switchScene(event, "settings.fxml");
+        switchScene(event, "settingsMenu.fxml");
     }
 
     @FXML
@@ -94,7 +94,6 @@ public class LockDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // =============== TIMEOUT CONTROLS ===============
 
     @FXML
     void timeoutSliderMoved(MouseEvent event) {

@@ -96,10 +96,10 @@ public class CameraDetailController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    //@FXML
-    //void settingsButtonPressed(ActionEvent event) {
-       // switchScene(event, "settings.fxml");
-    //}
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {

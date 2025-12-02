@@ -36,7 +36,6 @@ public class lockController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // ===================== INITIALIZE =====================
 
     @FXML
     public void initialize() {
@@ -61,10 +60,10 @@ public class lockController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    //@FXML
-    //void settingsButtonPressed(ActionEvent event) {
-      //  switchScene(event, "settings.fxml");
-    //}
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {
@@ -72,7 +71,6 @@ public class lockController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // ===================== ICON CLICKS → DETAIL PAGE =====================
 
     @FXML
     void lock1ButtonClicked(MouseEvent event) {

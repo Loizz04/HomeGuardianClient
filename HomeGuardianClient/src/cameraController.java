@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -120,10 +121,10 @@ public class cameraController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    //@FXML
-    //void settingsButtonPressed(ActionEvent event) {
-     //   switchScene(event, "SettingsMenu.fxml");
-    //}
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {

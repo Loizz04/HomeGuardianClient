@@ -4,10 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
 
 public class alarmController extends homeGuardianClientController {
 
@@ -50,9 +54,6 @@ public class alarmController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // ---------------------------------------------------------
-    // Initial setup
-    // ---------------------------------------------------------
     @FXML
     private void initialize() {
         // Set all toggles to default OFF look at startup
@@ -87,9 +88,6 @@ public class alarmController extends homeGuardianClientController {
         sendToServer(msg);
     }
 
-    // ---------------------------------------------------------
-    // Navigation buttons (bottom bar)
-    // ---------------------------------------------------------
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
         switchScene(event, "activityLogPage.fxml");
@@ -105,21 +103,16 @@ public class alarmController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    // Uncomment when you actually have a settings page FXML
-    // @FXML
-    // void settingsButtonPressed(ActionEvent event) {
-    //     switchScene(event, "SettingsMenu.fxml");
-    // }
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {
         sendToServer("logout");
         switchScene(event, "login.fxml");
     }
-
-    // ---------------------------------------------------------
-    // Alarm icon clicks – open alarmDetail.fxml
-    // ---------------------------------------------------------
     @FXML
     void alarm1ButtonClicked(MouseEvent event) {
         openAlarmDetail(1, event);
@@ -143,17 +136,19 @@ public class alarmController extends homeGuardianClientController {
 
             AlarmDetailController controller = loader.getController();
             controller.setAlarmNumber(alarmNumber);
+            
+            Node sourceNode = (Node) event.getSource();
+            Stage stage = (Stage) sourceNode.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
 
-            // helper in homeGuardianClientController
-            showScene(root, event);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // ---------------------------------------------------------
-    // Toggle button actions
-    // ---------------------------------------------------------
     @FXML
     void alarm1ToggleButtonPressed(ActionEvent event) {
         handleAlarmToggle(alarm1ToggleButton, 1);
@@ -169,9 +164,5 @@ public class alarmController extends homeGuardianClientController {
         handleAlarmToggle(alarm3ToggleButton, 3);
     }
 
-    @FXML
-    void settingsButtonPressed(ActionEvent event) {
-        // If you later add a settings page, point this to it
-        // switchScene(event, "SettingsMenu.fxml");
-    }
+
 }

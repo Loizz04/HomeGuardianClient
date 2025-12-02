@@ -1,13 +1,25 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
+/**
+ * Author: Lois MAthew
+ */
 public class signUpMenuController extends homeGuardianClientController {
 
     @FXML
@@ -28,33 +40,137 @@ public class signUpMenuController extends homeGuardianClientController {
     @FXML
     private TextField usernameField;
 
-    /**
-     * When the user clicks the "Login" link at the bottom.
-     * Switches back to the Login screen.
-     */
+    private String emailFieldStyle;
+    private String nameFieldStyle;
+    private String usernameFieldStyle;
+    private String passwordFieldStyle;
+
+    private ActionEvent lastSignUpEvent;
+
+    private boolean check;
+
+    @FXML
+    public void initialize() {
+        if (emailField != null) {
+            emailFieldStyle = emailField.getStyle();
+        }
+        if (nameField != null) {
+            nameFieldStyle = nameField.getStyle();
+        }
+        if (usernameField != null) {
+            usernameFieldStyle = usernameField.getStyle();
+        }
+        if (passwordField != null) {
+            passwordFieldStyle = passwordField.getStyle();
+        }
+
+        // Remove red border when each field is focused again
+        if (emailField != null) {
+            emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) { // When clicked/focused
+                    emailField.setStyle(emailFieldStyle);
+                }
+            });
+        }
+
+        if (nameField != null) {
+            nameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    nameField.setStyle(nameFieldStyle);
+                }
+            });
+        }
+
+        if (usernameField != null) {
+            usernameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    usernameField.setStyle(usernameFieldStyle);
+                }
+            });
+        }
+
+        if (passwordField != null) {
+            passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    passwordField.setStyle(passwordFieldStyle);
+                }
+            });
+        }
+
+        // Register a message handler for this screen (for signupResult messages)
+        HomeGuardianClient client = getClient();
+        if (client != null) {
+            client.setMessageHandler(this::handleServerMessage);
+        }
+    }
+
+    //Format checking helpers
+    private boolean emailFormat(String s) {
+        if (s == null) s = "";
+        if (s.matches("^[a-zA-Z0-9_+&*-]+(?:\\." +
+                      "[a-zA-Z0-9_+&*-]+)*@" +
+                      "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+            return true;
+        } else {
+            if (emailField != null) {
+                emailField.setStyle("-fx-border-color: red");
+            }
+            check = false;
+            return false;
+        }
+    }
+    private boolean generalFormat(String s, TextInputControl control) {
+        if (s == null) s = "";
+        if (s.length() > 22 || s.contains(" ") || "".equals(s)) {
+            if (control != null) {
+                control.setStyle("-fx-border-color: red");
+            }
+            check = false;
+            return false;
+        }
+        return true;
+    }
+    private boolean checkFormat(String user, String pass, String name, String email) {
+        check = true;  // reset flag
+
+        emailFormat(email);
+        generalFormat(user, usernameField);
+        generalFormat(pass, passwordField);
+        generalFormat(name, nameField);
+
+        if (!check) {
+            // Show one generic alert if anything failed
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fix the highlighted fields.\n" +"- Email must be a valid address.\n" +
+                    "- Name, username, and password must be 1–22 characters with no spaces.",
+                    ButtonType.OK);
+            alert.setHeaderText("Invalid Input Format");
+            alert.showAndWait();
+            check = true;
+            return false;
+        }
+
+        return true;
+    }
+
     @FXML
     void loginLinkPressed(MouseEvent event) {
         switchScene(event, "login.fxml");
     }
 
-    /**
-     * Sends a signup request to the server.
-     */
     @FXML
     void signUpButtonPressed(ActionEvent event) {
+        this.lastSignUpEvent = event;
 
-        String name = nameField.getText().trim();
-        String email = emailField.getText().trim();
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
+        String name = nameField != null ? nameField.getText().trim() : "";
+        String email = emailField != null ? emailField.getText().trim() : "";
+        String username = usernameField != null ? usernameField.getText().trim() : "";
+        String password = passwordField != null ? passwordField.getText() : "";
 
-        // Basic validation (optional)
-        if (name.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            System.out.println("All fields are required.");
+        // Local format validation
+        if (!checkFormat(username, password, name, email)) {
             return;
         }
 
-        // Build message to server: ["signup", name, email, username, password]
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("signup");
         msg.add(name);
@@ -62,9 +178,75 @@ public class signUpMenuController extends homeGuardianClientController {
         msg.add(username);
         msg.add(password);
 
+        // Send using base controller helper
         sendToServer(msg);
+    }
 
-        // Server will respond separately. Once successful, client switches to login
-        // inside handleMessageFromServer() in your client class.
+    private void handleServerMessage(Object msg) {
+        if (msg instanceof ArrayList<?>) {
+            ArrayList<?> list = (ArrayList<?>) msg;
+
+            if (list.size() >= 2 && "signupResult".equals(list.get(0))) {
+                String status = String.valueOf(list.get(1));
+
+                if ("success".equalsIgnoreCase(status)) {
+                    onSignupSuccess(list);
+                } else {
+                    String error = (list.size() >= 3)
+                            ? String.valueOf(list.get(2))
+                            : "Signup failed.";
+                    onSignupError(error);
+                }
+            }
+        }
+        // Ignore other messages here (like ClientUser);
+        // HomeGuardianClient already updates its ClientUser internally.
+    }
+
+    private void onSignupSuccess(ArrayList<?> list) {
+        // Stop handling signup-specific messages; next screens can set their own handler
+        HomeGuardianClient client = getClient();
+        if (client != null) {
+            client.setMessageHandler(null);
+        }
+
+        String successMsg = (list.size() >= 3)
+                ? String.valueOf(list.get(2))
+                : "Signup successful.";
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, successMsg, ButtonType.OK);
+        alert.setHeaderText("Signup Successful");
+        alert.showAndWait();
+
+        // Switch to main menu on the JavaFX thread
+        javafx.application.Platform.runLater(() -> {
+            try {
+                if (lastSignUpEvent != null) {
+                    switchScene(lastSignUpEvent, "mainMenu.fxml");
+                } else if (usernameField != null) {
+                    // Fallback: manually load if event somehow null
+                    Parent root = FXMLLoader.load(getClass().getResource("mainMenu.fxml"));
+                    Stage stage = (Stage) ((Node) usernameField).getScene().getWindow();
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert err = new Alert(Alert.AlertType.ERROR,
+                        "Signup succeeded but failed to load main menu.",
+                        ButtonType.OK);
+                err.setHeaderText("Navigation Error");
+                err.showAndWait();
+            }
+        });
+    }
+
+    private void onSignupError(String errorMessage) {
+        // Fields are already red from format validation if needed,
+        // but we can also show the server-specific error
+        Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+        alert.setHeaderText("Signup Error");
+        alert.showAndWait();
     }
 }

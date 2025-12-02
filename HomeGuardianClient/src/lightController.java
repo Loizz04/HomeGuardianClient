@@ -42,7 +42,6 @@ public class lightController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // --------- Device icons → open detail screen ---------
 
     @FXML
     void light1ButtonClicked(MouseEvent event) {
@@ -119,10 +118,10 @@ public class lightController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    //@FXML
-    //void settingsButtonPressed(ActionEvent event) {
-     //   switchScene(event, "SettingsMenu.fxml");
-    //}
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {

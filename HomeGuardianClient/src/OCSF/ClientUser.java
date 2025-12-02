@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * ClientUser
  *
@@ -275,6 +276,7 @@ public class ClientUser {
      * Simple value object for a single activity log entry as displayed
      * on the Activity Log screen.
      */
+
     public static class ActivityEntry {
         private final String device;
         private final String activity;
@@ -339,6 +341,8 @@ public class ClientUser {
     private final List<LockState>         locks         = new ArrayList<>();
     private final List<ActivityEntry>     activityLog   = new ArrayList<>();
     private final List<NotificationEntry> notifications = new ArrayList<>();
+    
+
 
     // ---------------------------------------------------------------------
     // Constructors

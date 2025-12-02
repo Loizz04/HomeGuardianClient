@@ -21,13 +21,13 @@ public class mainMenuController extends homeGuardianClientController {
     @FXML
     void activityLogButtonClicked(MouseEvent event) {
         // Go to Activity Log screen
-        switchScene(event, "ActivityLogMenu.fxml");
+        switchScene(event, "activityLogPage.fxml");
     }
 
     @FXML
     void devicesButtonClicked(MouseEvent event) {
         // Go to Devices screen
-        switchScene(event, "DevicesMenu.fxml");
+        switchScene(event, "deviceMenu.fxml");
     }
 
     @FXML
@@ -36,12 +36,11 @@ public class mainMenuController extends homeGuardianClientController {
         sendToServer("logout");
 
         // Back to Login screen
-        switchScene(event, "LoginMenu.fxml");
+        switchScene(event, "login.fxml");
     }
 
     @FXML
     void settingsButtonClicked(MouseEvent event) {
-        // Go to Settings screen
-        switchScene(event, "SettingsMenu.fxml");
+        switchScene(event, "settingsMenu.fxml");
     }
 }

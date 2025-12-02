@@ -9,13 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import OCSF.ObservableSWRClient;
-import javafx.application.Application;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 
 /**
  * Shared base controller for all JavaFX screens.
@@ -30,37 +30,45 @@ import javafx.stage.Stage;
 public abstract class homeGuardianClientController {
 
     protected static HomeGuardianClient client;
-    protected static ClientUser clientUser;
+    
 
     public static void initClient(HomeGuardianClient c) {
         client = c;
     }
-
+//allow any controller to hget the client
     public static HomeGuardianClient getClient() {
         return client;
     }
 
-    public static void setClientUser(ClientUser u) {
-        clientUser = u;
-    }
 
+    // Convenience: any controller can ask for the latest ClientUser
     public static ClientUser getClientUser() {
-        return clientUser;
+        if (client == null) {
+            return null;
+        }
+        return client.getClientUser();
     }
 
-    // ---------- Scene switching helper ----------
+    protected void switchScene(Event event, String fxmlPath) {
+        if (event == null) {
+            System.err.println("switchScene called with null event for " + fxmlPath);
+            return;
+        }
 
-    protected void switchScene(ActionEvent event, String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Node sourceNode = (Node) event.getSource();
+            Stage stage = (Stage) sourceNode.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             System.err.println("Error switching scene to " + fxmlPath + ": " + e.getMessage());
+        } catch (ClassCastException e) {
+            System.err.println("Event source is not a Node; cannot switch scene to " + fxmlPath);
         }
     }
+
 
     // ---------- Helper methods to talk to the server ----------
 

@@ -88,7 +88,7 @@ public class AlarmDetailController extends homeGuardianClientController {
 
     @FXML
     void settingsButtonPressed(ActionEvent event) {
-        switchScene(event, "settings.fxml");
+        switchScene(event, "settingsMenu.fxml");
     }
 
     @FXML
@@ -97,7 +97,6 @@ public class AlarmDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // -------- toggle handlers --------
 
     @FXML
     void motionToggleButtonPressed(ActionEvent event) {

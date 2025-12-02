@@ -102,10 +102,10 @@ public class LightDetailController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-    //@FXML
-    //void settingsButtonPressed(ActionEvent event) {
-        //switchScene(event, "SettingsMenu.fxml");
-    //}
+    @FXML
+    void settingsButtonPressed(ActionEvent event) {
+    	switchScene(event, "settingsMenu.fxml");
+    }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {
@@ -113,7 +113,6 @@ public class LightDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // ------------- BRIGHTNESS -------------
 
     @FXML
     void brightnessSliderMoved(MouseEvent event) {

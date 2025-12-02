@@ -63,10 +63,10 @@ public class DevicesPageController extends homeGuardianClientController {
         switchScene(event, "mainMenu.fxml");
     }
 
-   // @FXML
-  //  void settingsButtonPressed(ActionEvent event) {
-    //    switchScene(event, "SettingsMenu.fxml");
-    //}
+   @FXML
+   void settingsButtonPressed(ActionEvent event) {
+	   switchScene(event, "settingsMenu.fxml");
+   }
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {

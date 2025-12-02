@@ -14,7 +14,7 @@
          <children>
             <ImageView fitHeight="301.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Screenshot%202025-10-20%20095707.png" />
+                  <Image url="@Screenshot%202025-10-20%20095707.png" />
                </image>
             </ImageView>
          </children>
@@ -60,17 +60,17 @@
             </Label>
             <ImageView fx:id="lockButton" fitHeight="167.0" fitWidth="164.0" layoutX="227.0" layoutY="103.0" onMouseClicked="#lockButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../lock.png" />
+                  <Image url="@lock.png" />
                </image>
             </ImageView>
             <ImageView fx:id="cameraButton" fitHeight="167.0" fitWidth="164.0" layoutX="411.0" layoutY="103.0" onMouseClicked="#cameraButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../camera.png" />
+                  <Image url="@camera.png" />
                </image>
             </ImageView>
             <ImageView fx:id="alarmButton" fitHeight="167.0" fitWidth="164.0" layoutX="594.0" layoutY="103.0" onMouseClicked="#alarmButtonClicked" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../alarm.png" />
+                  <Image url="@alarm.png" />
                </image>
             </ImageView>
          </children>
