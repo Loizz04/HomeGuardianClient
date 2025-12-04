@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -43,8 +46,6 @@ public class lockController extends homeGuardianClientController {
         styleToggle(lock2ToggleButton);
     }
 
-    // ===================== BOTTOM NAV =====================
-
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
         switchScene(event, "activityLogPage.fxml");
@@ -84,8 +85,6 @@ public class lockController extends homeGuardianClientController {
         switchScene(event, "LockDetail.fxml");
     }
 
-    // ===================== TOGGLE HANDLERS =====================
-
     @FXML
     void lock1ToggleButtonPressed(ActionEvent event) {
         handleLockToggle(1, lock1ToggleButton);
@@ -98,32 +97,24 @@ public class lockController extends homeGuardianClientController {
 
     private void handleLockToggle(int lockId, ToggleButton toggleButton) {
         boolean engaged = toggleButton.isSelected(); // true = locked/engaged
-
         styleToggle(toggleButton);
 
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("TOGGLE_LOCK");
         msg.add(lockId);
         msg.add(engaged);
-
         sendToServer(msg);
-
         System.out.println("Lock " + lockId + " is now " + (engaged ? "ENGAGED" : "DISENGAGED"));
     }
 
-    // ===================== STYLE TOGGLES (ENGAGE / DISENGAGE) =====================
-
     private void styleToggle(ToggleButton button) {
         if (button == null) return;
-
         boolean engaged = button.isSelected();
 
         if (engaged) {
-            // Currently locked → show red "Disengage" (to unlock)
             button.setText("Disengage");
             button.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
         } else {
-            // Currently unlocked → show green "Engage" (to lock)
             button.setText("Engage");
             button.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         }

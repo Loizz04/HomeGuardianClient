@@ -1,3 +1,7 @@
+/*
+ * Author: Lois Mathew
+ */
+
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -15,11 +19,8 @@ import javafx.stage.Stage;
 
 public class alarmController extends homeGuardianClientController {
 
-    // --- Styles for toggle buttons ---
-    private static final String TOGGLE_ON_STYLE =
-            "-fx-background-color: #28a745; -fx-text-fill: white;"; // green
-    private static final String TOGGLE_OFF_STYLE =
-            "-fx-background-color: #dc3545; -fx-text-fill: white;"; // red
+    private static final String TOGGLE_ON_STYLE ="-fx-background-color: #28a745; -fx-text-fill: white;"; // green
+    private static final String TOGGLE_OFF_STYLE ="-fx-background-color: #dc3545; -fx-text-fill: white;"; // red
 
     @FXML
     private Button activityLogButton;
@@ -56,8 +57,8 @@ public class alarmController extends homeGuardianClientController {
 
     @FXML
     private void initialize() {
-        // Set all toggles to default OFF look at startup
-        initToggle(alarm1ToggleButton);
+//initialize off
+    	initToggle(alarm1ToggleButton);
         initToggle(alarm2ToggleButton);
         initToggle(alarm3ToggleButton);
     }
@@ -83,7 +84,6 @@ public class alarmController extends homeGuardianClientController {
         applyToggleStyle(toggle);
 
         boolean on = toggle.isSelected();
-        // Simple message format – adjust if your server expects something else
         String msg = "TOGGLE_ALARM" + alarmNumber + " " + (on ? "ON" : "OFF");
         sendToServer(msg);
     }

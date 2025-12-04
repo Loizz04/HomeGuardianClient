@@ -1,3 +1,7 @@
+/*
+ * Author: Lois Mathew
+ */
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,10 +34,7 @@ public class DevicesPageController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // ============================
-    // Top Device Buttons
-    // ============================
-
+  
     @FXML
     void lightButtonClicked(MouseEvent event) {
         switchScene(event, "lightMenu.fxml");
@@ -53,11 +54,6 @@ public class DevicesPageController extends homeGuardianClientController {
     void alarmButtonClicked(MouseEvent event) {
         switchScene(event, "alarmMenu.fxml");
     }
-
-    // ============================
-    // Bottom Navigation Buttons
-    // ============================
-
     @FXML
     void mainMenuButtonPressed(ActionEvent event) {
         switchScene(event, "mainMenu.fxml");

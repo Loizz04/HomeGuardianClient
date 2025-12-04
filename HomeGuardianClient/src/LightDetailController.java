@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 import OCSF.ClientUser;
@@ -14,17 +17,14 @@ import javafx.scene.paint.Color;
 
 public class LightDetailController extends homeGuardianClientController {
 
-    // Set by lightController before loading this scene
     private static int currentLightId = 1;
-
     private int lightId = 1;
-
     public static void setCurrentLightId(int id) {
         currentLightId = id;
     }
 
     @FXML
-    private Label lightTitleLabel;           // "LIGHT 1", "LIGHT 2", ...
+    private Label lightTitleLabel;           
 
     @FXML
     private Button activityLogButton;
@@ -65,8 +65,6 @@ public class LightDetailController extends homeGuardianClientController {
     @FXML
     private TextField timeoutTextField;
 
-    // ================== INITIALIZE ==================
-
     @FXML
     public void initialize() {
         // Use the ID passed in from the light menu
@@ -76,9 +74,6 @@ public class LightDetailController extends homeGuardianClientController {
             lightTitleLabel.setText("LIGHT " + lightId);
         }
     }
-
-    // ================== NAV BUTTONS ==================
-
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
         switchScene(event, "activityLogPage.fxml");
@@ -105,7 +100,6 @@ public class LightDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // ================== BRIGHTNESS ==================
 
     @FXML
     void brightnessSliderMoved(MouseEvent event) {
@@ -143,11 +137,10 @@ public class LightDetailController extends homeGuardianClientController {
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("SET_LIGHT_BRIGHTNESS");
         msg.add(lightId);
-        msg.add(value);   // 0–100 %
+        msg.add(value);  
         sendToServer(msg);
     }
 
-    // ================== COLOUR ==================
 
     @FXML
     void colorPickerChanged(ActionEvent event) {
@@ -170,8 +163,6 @@ public class LightDetailController extends homeGuardianClientController {
                     "Colour changed to RGB(" + r + "," + g + "," + b + ")");
         }
     }
-
-    // ================== TIMEOUT ==================
 
     @FXML
     void timeoutSliderMoved(MouseEvent event) {
@@ -212,8 +203,6 @@ public class LightDetailController extends homeGuardianClientController {
         sendToServer(msg);
     }
 
-    // ================== MOTION ON/OFF ==================
-
     @FXML
     void motionToggleButtonPressed(ActionEvent event) {
         boolean on = motionToggleButton.isSelected();
@@ -229,7 +218,6 @@ public class LightDetailController extends homeGuardianClientController {
                     "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         }
 
-        // Build message to send to server
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("SET_LIGHT_MOTION_LINK");
         msg.add(lightId);
@@ -242,8 +230,6 @@ public class LightDetailController extends homeGuardianClientController {
                     "Motion sensor turned " + (on ? "ON" : "OFF"));
         }
     }
-
-    // ================== MOTION SENSITIVITY ==================
 
     @FXML
     void motionSensitivitySliderMoved(MouseEvent event) {
@@ -281,7 +267,6 @@ public class LightDetailController extends homeGuardianClientController {
     private void sendMotionSensitivityToServer(int value) {
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("SET_MOTION_SENSITIVITY");
-        // IMPORTANT: server expects only the value at index 1
         msg.add(value);
         sendToServer(msg);
     }

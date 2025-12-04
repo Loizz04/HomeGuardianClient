@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -14,14 +17,9 @@ import javafx.scene.media.MediaView;
 
 
 public class CameraDetailController extends homeGuardianClientController {
-
-    // Will be set from cameraController before switching scenes
     private static int currentCameraId = 1;
-
     public static void setCurrentCameraId(int id) {
-        currentCameraId = id;
-    }
-
+        currentCameraId = id;}
     private int cameraId = 1;
 
     @FXML
@@ -58,9 +56,6 @@ public class CameraDetailController extends homeGuardianClientController {
 
     private final java.util.Map<String, String> footageFiles = new java.util.HashMap<>();
 
-
-    // ================== INITIALIZE ==================
-
     @FXML
     public void initialize() {
         cameraId = currentCameraId;
@@ -68,8 +63,7 @@ public class CameraDetailController extends homeGuardianClientController {
         if (cameraTitleLabel != null) {
             cameraTitleLabel.setText("CAMERA " + cameraId);
         }
-
-        // --- Only show the 2 real options ---
+        //show options
         if (footageDropdown != null) {
             footageDropdown.getItems().clear();
             footageDropdown.getItems().addAll(
@@ -89,7 +83,6 @@ public class CameraDetailController extends homeGuardianClientController {
         styleToggle(motionToggleButton);
     }
 
-    // ================== BOTTOM NAV BUTTONS ==================
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -117,25 +110,15 @@ public class CameraDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
-    // ================== FOOTAGE DROPDOWN ==================
 
     @FXML
     void footageDropdownChanged(ActionEvent event) {
         String selected = footageDropdown.getValue();
         if (selected == null) return;
-
-        // Look up the file path for the chosen option
         String path = footageFiles.get(selected);
         if (path == null) {
             System.out.println("No video mapped for: " + selected);
             return;
-        }
-
-        // Stop previous video if it's playing
-        if (currentPlayer != null) {
-            currentPlayer.stop();
-            currentPlayer.dispose();
-            currentPlayer = null;
         }
 
         try {
@@ -148,13 +131,11 @@ public class CameraDetailController extends homeGuardianClientController {
             mediaView.setMediaPlayer(currentPlayer);
             currentPlayer.play();
 
-            // tell the server what we requested
             ArrayList<Object> msg = new ArrayList<>();
             msg.add("REQUEST_CAMERA_FOOTAGE");
             msg.add(cameraId);
-            msg.add(selected);  // "Live Feed" or "Last Recording"
+            msg.add(selected);  
             sendToServer(msg);
-
             System.out.println("Playing '" + selected + "' from " + path);
 
         } catch (Exception e) {
@@ -162,8 +143,6 @@ public class CameraDetailController extends homeGuardianClientController {
             System.out.println("Could not load video: " + path);
         }
     }
-
-    // ================== TOGGLE BUTTONS ==================
 
     @FXML
     void recordToggleButtonPressed(ActionEvent event) {
@@ -177,8 +156,7 @@ public class CameraDetailController extends homeGuardianClientController {
 
         sendToServer(msg);
 
-        System.out.println("Recording " + (on ? "ON" : "OFF") +
-                           " for camera " + cameraId);
+        System.out.println("Recording " + (on ? "ON" : "OFF") +" for camera " + cameraId);
     }
 
     @FXML
@@ -190,14 +168,9 @@ public class CameraDetailController extends homeGuardianClientController {
         msg.add("TOGGLE_CAMERA_MOTION");
         msg.add(cameraId);
         msg.add(on);
-
         sendToServer(msg);
-
-        System.out.println("Motion sensor " + (on ? "ON" : "OFF") +
-                           " for camera " + cameraId);
+        System.out.println("Motion sensor " + (on ? "ON" : "OFF") +" for camera " + cameraId);
     }
-
-    // ================== HELPER: STYLE TOGGLES ==================
 
     private void styleToggle(ToggleButton button) {
         if (button == null) return;

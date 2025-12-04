@@ -1,4 +1,6 @@
-
+/*
+ * Author: Lois Mathew
+ */
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public abstract class homeGuardianClientController {
     }
 
 
-    // Convenience: any controller can ask for the latest ClientUser
+    //any controller can ask for the latest ClientUser
     public static ClientUser getClientUser() {
         if (client == null) {
             return null;
@@ -71,28 +73,21 @@ public abstract class homeGuardianClientController {
     }
 
 
-    // ---------- Helper methods to talk to the server ----------
-
-    /**
-     * Send an ArrayList-based command to the server.
-     * First element = String command name.
-     */
+//Methods to talk to server 
     protected void sendToServer(ArrayList<Object> msg) {
         if (client != null) {
             client.sendCommand(msg);
         } else {
-            System.err.println("Client is null - did you call initClient()?");
+            System.err.println("Client is null");
         }
     }
 
-    /**
-     * Send a plain String command (if your protocol uses Strings).
-     */
+//for string msgs
     protected void sendToServer(String msg) {
         if (client != null) {
             client.sendCommand(msg);
         } else {
-            System.err.println("Client is null - did you call initClient()?");
+            System.err.println("Client is null");
         }
     }
 }

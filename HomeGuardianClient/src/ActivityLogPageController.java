@@ -1,3 +1,7 @@
+/*
+ * Author: Lois Mathew
+ */
+
 import OCSF.ClientUser;
 
 import javafx.collections.FXCollections;
@@ -38,24 +42,14 @@ public class ActivityLogPageController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    private final ObservableList<ClientUser.ActivityEntry> logData =
-            FXCollections.observableArrayList();
+    private final ObservableList<ClientUser.ActivityEntry> logData=FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Bind columns to ActivityEntry getters: getDevice(), getActivity(), getDateTime()
-        deviceColumn.setCellValueFactory(
-                new PropertyValueFactory<>("device")
-        );
-        activityColumn.setCellValueFactory(
-                new PropertyValueFactory<>("activity")
-        );
-        dateTimeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("dateTime")
-        );
-
+        deviceColumn.setCellValueFactory(new PropertyValueFactory<>("device"));
+        activityColumn.setCellValueFactory(new PropertyValueFactory<>("activity"));
+        dateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
         activityTable.setItems(logData);
-
         loadLogs();
     }
 
@@ -79,11 +73,8 @@ public class ActivityLogPageController extends homeGuardianClientController {
         logData.setAll(logs);
     }
 
-    // ----------------- BUTTONS -----------------
-
     @FXML
     void refreshButtonPressed(ActionEvent event) {
-        // Just reload from ClientUser
         loadLogs();
     }
 

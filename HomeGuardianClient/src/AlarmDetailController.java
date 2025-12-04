@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -8,14 +11,12 @@ import javafx.scene.control.ToggleButton;
 
 public class AlarmDetailController extends homeGuardianClientController {
 
-    // -------- which alarm is this screen for? (1, 2, or 3)
     private static int currentAlarmId = 1;
-
     public static void setCurrentAlarmId(int id) {
         currentAlarmId = id;
     }
 
-    // For the loader pattern we used earlier:
+    //loader pattern 
     public void setAlarmNumber(int id) {
         currentAlarmId = id;
         alarmId = id;
@@ -25,8 +26,6 @@ public class AlarmDetailController extends homeGuardianClientController {
     }
 
     private int alarmId = 1;
-
-    // -------- FXML fields --------
 
     @FXML
     private Button activityLogButton;
@@ -52,24 +51,17 @@ public class AlarmDetailController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // -------- initialize --------
     @FXML
     public void initialize() {
-        // which alarm is this instance for
         if (alarmId <= 0) {
             alarmId = currentAlarmId;
         }
-
         if (alarmTitleLabel != null) {
             alarmTitleLabel.setText("ALARM " + alarmId);
         }
-
-        // style both toggles based on their initial state
         styleToggle(motionToggleButton);
         styleToggle(recordOnCamButton);
     }
-
-    // -------- bottom nav buttons --------
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -125,8 +117,6 @@ public class AlarmDetailController extends homeGuardianClientController {
         sendToServer(msg);
         System.out.println("Alarm " + alarmId + " record-on-camera: " + (on ? "ON" : "OFF"));
     }
-
-    // -------- helper: style toggle buttons --------
 
     private void styleToggle(ToggleButton button) {
         if (button == null) return;

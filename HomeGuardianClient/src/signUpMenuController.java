@@ -1,3 +1,7 @@
+
+/*
+ * Author: Lois Mathew
+ */
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -17,9 +21,6 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-/**
- * Author: Lois MAthew
- */
 public class signUpMenuController extends homeGuardianClientController {
 
     @FXML
@@ -64,15 +65,14 @@ public class signUpMenuController extends homeGuardianClientController {
             passwordFieldStyle = passwordField.getStyle();
         }
 
-        // Remove red border when each field is focused again
+        //Remove red border when each field is focused again
         if (emailField != null) {
             emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal) { // When clicked/focused
+                if (newVal) { 
                     emailField.setStyle(emailFieldStyle);
                 }
             });
         }
-
         if (nameField != null) {
             nameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal) {
@@ -80,7 +80,6 @@ public class signUpMenuController extends homeGuardianClientController {
                 }
             });
         }
-
         if (usernameField != null) {
             usernameField.focusedProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal) {
@@ -97,14 +96,13 @@ public class signUpMenuController extends homeGuardianClientController {
             });
         }
 
-        // Register a message handler for this screen (for signupResult messages)
         HomeGuardianClient client = getClient();
         if (client != null) {
             client.setMessageHandler(this::handleServerMessage);
         }
     }
 
-    //Format checking helpers
+    //Format checking
     private boolean emailFormat(String s) {
         if (s == null) s = "";
         if (s.matches("^[a-zA-Z0-9_+&*-]+(?:\\." +
@@ -131,7 +129,7 @@ public class signUpMenuController extends homeGuardianClientController {
         return true;
     }
     private boolean checkFormat(String user, String pass, String name, String email) {
-        check = true;  // reset flag
+        check = true;  
 
         emailFormat(email);
         generalFormat(user, usernameField);
@@ -139,10 +137,7 @@ public class signUpMenuController extends homeGuardianClientController {
         generalFormat(name, nameField);
 
         if (!check) {
-            // Show one generic alert if anything failed
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fix the highlighted fields.\n" +"- Email must be a valid address.\n" +
-                    "- Name, username, and password must be 1–22 characters with no spaces.",
-                    ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fix the highlighted fields.\n" +"- Email must be a valid address.\n" +"- Name, username, and password must be 1–22 characters with no spaces.",ButtonType.OK);
             alert.setHeaderText("Invalid Input Format");
             alert.showAndWait();
             check = true;
@@ -165,8 +160,6 @@ public class signUpMenuController extends homeGuardianClientController {
         String email = emailField != null ? emailField.getText().trim() : "";
         String username = usernameField != null ? usernameField.getText().trim() : "";
         String password = passwordField != null ? passwordField.getText() : "";
-
-        // Local format validation
         if (!checkFormat(username, password, name, email)) {
             return;
         }
@@ -177,8 +170,6 @@ public class signUpMenuController extends homeGuardianClientController {
         msg.add(email);
         msg.add(username);
         msg.add(password);
-
-        // Send using base controller helper
         sendToServer(msg);
     }
 
@@ -199,12 +190,9 @@ public class signUpMenuController extends homeGuardianClientController {
                 }
             }
         }
-        // Ignore other messages here (like ClientUser);
-        // HomeGuardianClient already updates its ClientUser internally.
     }
 
     private void onSignupSuccess(ArrayList<?> list) {
-        // Stop handling signup-specific messages; next screens can set their own handler
         HomeGuardianClient client = getClient();
         if (client != null) {
             client.setMessageHandler(null);
@@ -243,8 +231,7 @@ public class signUpMenuController extends homeGuardianClientController {
     }
 
     private void onSignupError(String errorMessage) {
-        // Fields are already red from format validation if needed,
-        // but we can also show the server-specific error
+//show the server-specific error
         Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
         alert.setHeaderText("Signup Error");
         alert.showAndWait();

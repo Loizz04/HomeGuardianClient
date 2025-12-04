@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 
@@ -43,8 +46,6 @@ public class cameraController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // ---------------------- CAMERA ICON CLICKS ----------------------
-
     @FXML
     void camera1ButtonClicked(MouseEvent event) {
         openCameraDetail(event, 1);
@@ -65,8 +66,6 @@ public class cameraController extends homeGuardianClientController {
         switchScene(event, "CameraDetail.fxml");  // shared detail page
     }
 
-    // ---------------------- TOGGLE BUTTONS ----------------------
-
     @FXML
     void camera1ToggleButtonPressed(ActionEvent event) {
         handleCameraToggle(1, camera1ToggleButton);
@@ -83,10 +82,7 @@ public class cameraController extends homeGuardianClientController {
     }
 
     private void handleCameraToggle(int cameraId, ToggleButton toggleButton) {
-
         boolean on = toggleButton.isSelected();
-
-        // Update button appearance
         if (on) {
             toggleButton.setText("ON");
             toggleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
@@ -95,7 +91,7 @@ public class cameraController extends homeGuardianClientController {
             toggleButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
         }
 
-        // Send to server
+        //Send to server
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("TOGGLE_CAMERA");
         msg.add(cameraId);
@@ -103,8 +99,6 @@ public class cameraController extends homeGuardianClientController {
 
         sendToServer(msg);
     }
-
-    // ---------------------- NAVIGATION BUTTONS ----------------------
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -131,8 +125,6 @@ public class cameraController extends homeGuardianClientController {
         sendToServer("logout");
         switchScene(event, "login.fxml");
     }
-
-    // ---------------------- INITIAL BUTTON STYLES ----------------------
 
     @FXML
     public void initialize() {

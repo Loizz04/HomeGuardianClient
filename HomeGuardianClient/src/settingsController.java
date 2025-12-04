@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -43,7 +46,6 @@ public class settingsController extends homeGuardianClientController {
 
     @FXML
     private void initialize() {
-        // Capture base style
         if (notificationEmailField != null) {
             emailFieldBaseStyle = notificationEmailField.getStyle();
         }
@@ -59,7 +61,7 @@ public class settingsController extends homeGuardianClientController {
             notificationEmailField.setDisable(!enabled);
         }
 
-        // When checkbox changes, enable/disable email field
+        
         notificationsCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
             notificationEmailField.setDisable(!newVal);
             // clear any error style when user toggles
@@ -111,33 +113,26 @@ public class settingsController extends homeGuardianClientController {
             return; // email field already marked red
         }
 
-        // Build command for server: ["updateNotifications", email, enabled]
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("updateNotifications");
         msg.add(email);
         msg.add(enabled);
-
-        // Send to server via base helper
         sendToServer(msg);
 
-        // Update local ClientUser snapshot
         ClientUser user = getClientUser();
         if (user != null) {
             user.setEmail(email);
             user.setNotificationsEnabled(enabled);
         }
 
-        // Confirmation alert
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "Notification settings saved successfully.",
-                ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"Notification settings saved successfully.",ButtonType.OK);
         alert.setHeaderText("Settings Saved");
         alert.showAndWait();
     }
 
     private boolean emailFormat(String s) {
         if (s.isEmpty()) {
-            // Allow empty email only if notifications are OFF
+            //Allow empty email only if notifications are OFF
             if (notificationsCheckBox.isSelected()) {
                 markEmailInvalid();
                 return false;
@@ -145,7 +140,6 @@ public class settingsController extends homeGuardianClientController {
                 return true;
             }
         }
-
         if (EMAIL_PATTERN.matcher(s).matches()) {
             return true;
         } else {
@@ -157,9 +151,7 @@ public class settingsController extends homeGuardianClientController {
     private void markEmailInvalid() {
         if (notificationEmailField != null) {
             notificationEmailField.setStyle("-fx-border-color: red");
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    "Please enter a valid email address or disable notifications.",
-                    ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please enter a valid email address or disable notifications.",ButtonType.OK);
             alert.setHeaderText("Invalid Email");
             alert.showAndWait();
         }

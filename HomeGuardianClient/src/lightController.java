@@ -1,3 +1,6 @@
+/*
+ * Author: Lois Mathew
+ */
 import java.util.ArrayList;
 
 import OCSF.ClientUser;
@@ -44,8 +47,6 @@ public class lightController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
-    // ===================== INITIALIZE =====================
-
     @FXML
     public void initialize() {
         styleToggle(light1ToggleButton);
@@ -66,8 +67,6 @@ public class lightController extends homeGuardianClientController {
         }
     }
 
-    // ===================== LIGHT ICON CLICKS =====================
-
     @FXML
     void light1ButtonClicked(MouseEvent event) {
         openLightDetail(event, 1);
@@ -85,16 +84,13 @@ public class lightController extends homeGuardianClientController {
 
     private void openLightDetail(MouseEvent event, int lightId) {
         LightDetailController.setCurrentLightId(lightId);
-        switchScene(event, "LightDetail.fxml");   // single shared FXML
-
-        // --- Log that user opened the detail page ---
+        switchScene(event, "LightDetail.fxml");  
+//log
         ClientUser user = getClientUser();
         if (user != null) {
             user.addActivity("Light " + lightId, "Opened light detail page");
         }
     }
-
-    // ===================== TOGGLE BUTTONS (ON/OFF) =====================
 
     @FXML
     void light1ToggleButtonPressed(ActionEvent event) {
@@ -113,7 +109,6 @@ public class lightController extends homeGuardianClientController {
 
     private void handleLightToggle(int lightId, ToggleButton toggleButton) {
         boolean on = toggleButton.isSelected();
-
         if (on) {
             toggleButton.setText("ON");
             toggleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
@@ -122,22 +117,18 @@ public class lightController extends homeGuardianClientController {
             toggleButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
         }
 
-        // --- Send to server ---
         ArrayList<Object> msg = new ArrayList<>();
         msg.add("TOGGLE_LIGHT");
         msg.add(lightId);
         msg.add(on);
         sendToServer(msg);
 
-        // --- Add to client-side activity log ---
         ClientUser user = getClientUser();
         if (user != null) {
             user.addActivity("Light " + lightId,
                     "Light switched " + (on ? "ON" : "OFF"));
         }
     }
-
-    // ===================== NAVIGATION BUTTONS =====================
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -163,7 +154,6 @@ public class lightController extends homeGuardianClientController {
     void logoutButtonPressed(ActionEvent event) {
         sendToServer("logout");
 
-        // Optional: log logout on client side too
         ClientUser user = getClientUser();
         if (user != null) {
             user.addActivity("System", "User logged out");

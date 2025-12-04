@@ -1,27 +1,16 @@
-package OCSF;
+/*
+ * Author: Lois Mathew
+ */
 
+package OCSF;
+//since this files functionality (state container:  client side info storage) was fairly repetitive AI was used to generate repeating getters setters and containers
+//all other files on client side have no AI usage
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
 
-/**
- * ClientUser
- *
- * This class lives on the CLIENT side only. It stores a snapshot of the
- * logged-in user's information and the current state of all devices that
- * the UI needs to display.
- *
- * All JavaFX controllers should read/write state via this class instead of
- * talking directly to the network layer. The HomeGuardianClient is
- * responsible for updating this object when the server sends new data.
- *
- * NOTE:
- *  - Device IDs in the UI are 1-based (Light 1..3, Camera 1..3, etc.)
- *  - Internally we store them in 0-based lists; helper methods convert
- *    between the two.
- */
 public class ClientUser {
 
     public static final int NUM_LIGHTS  = 3;
@@ -35,11 +24,8 @@ public class ClientUser {
     private String email;
     private boolean notificationsEnabled;
 
-    // ==========================================================
-    //  DEVICE STATE INNER CLASSES
-    // ==========================================================
-
-    // ------------ Lights ------------
+    //DEVICE STATE INNER CLASSES
+    // ------------Lights------------
     public static class LightState {
         private boolean present;
         private boolean on;
@@ -89,7 +75,7 @@ public class ClientUser {
         }
     }
 
-    // ------------ Cameras ------------
+    //------------Cameras------------
     public static class CameraState {
         private boolean present;
         private boolean on;
@@ -182,14 +168,8 @@ public class ClientUser {
         }
     }
 
-    // ==========================================================
     //  CLIENT-SIDE ACTIVITY LOG + NOTIFICATIONS
-    // ==========================================================
 
-    /**
-     * Simple value object for a single activity log entry as displayed
-     * on the Activity Log screen.
-     */
     public static class ActivityEntry {
         private final String device;
         private final String activity;
@@ -213,7 +193,7 @@ public class ClientUser {
     public static class NotificationEntry {
         private final String message;
         private final long   timestamp;
-        private boolean      read;
+        private boolean read;
 
         public NotificationEntry(String message, long timestamp) {
             this.message = message;
@@ -227,9 +207,7 @@ public class ClientUser {
         public void markRead() { this.read = true; }
     }
 
-    // ==========================================================
     //  FIELDS
-    // ==========================================================
 
     private final List<LightState>        lights        = new ArrayList<>();
     private final List<CameraState>       cameras       = new ArrayList<>();
@@ -238,9 +216,7 @@ public class ClientUser {
     private final List<ActivityEntry>     activityLog   = new ArrayList<>();
     private final List<NotificationEntry> notifications = new ArrayList<>();
 
-    // ==========================================================
     //  CONSTRUCTORS
-    // ==========================================================
 
     public ClientUser() {
         this(-1, null, null, null);
