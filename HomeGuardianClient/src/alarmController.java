@@ -84,7 +84,7 @@ public class alarmController extends homeGuardianClientController {
 
         boolean on = toggle.isSelected();
         // Simple message format – adjust if your server expects something else
-        String msg = "ALARM_TOGGLE " + alarmNumber + " " + (on ? "ON" : "OFF");
+        String msg = "TOGGLE_ALARM" + alarmNumber + " " + (on ? "ON" : "OFF");
         sendToServer(msg);
     }
 

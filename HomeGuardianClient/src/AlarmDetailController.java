@@ -104,7 +104,7 @@ public class AlarmDetailController extends homeGuardianClientController {
         styleToggle(motionToggleButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleAlarmMotion");
+        msg.add("TOGGLE_ALARM_MOTION");
         msg.add(alarmId);
         msg.add(on);
 
@@ -118,7 +118,7 @@ public class AlarmDetailController extends homeGuardianClientController {
         styleToggle(recordOnCamButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleAlarmRecordOnCam");
+        msg.add("TOGGLE_ALARM_RECORD_ON_CAM");
         msg.add(alarmId);
         msg.add(on);
 

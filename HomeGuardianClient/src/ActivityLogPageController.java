@@ -1,6 +1,5 @@
-import java.util.List;
-
 import OCSF.ClientUser;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,16 +12,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class ActivityLogPageController extends homeGuardianClientController {
 
     @FXML
-    private TableColumn<ClientUser.ActivityEntry, String> activityColumn;
+    private TableColumn<ClientUser.ActivityEntry, String> deviceColumn;
 
     @FXML
-    private TableView<ClientUser.ActivityEntry> activityTable;
+    private TableColumn<ClientUser.ActivityEntry, String> activityColumn;
 
     @FXML
     private TableColumn<ClientUser.ActivityEntry, String> dateTimeColumn;
 
     @FXML
-    private TableColumn<ClientUser.ActivityEntry, String> deviceColumn;
+    private TableView<ClientUser.ActivityEntry> activityTable;
 
     @FXML
     private Button devicesButton;
@@ -44,7 +43,7 @@ public class ActivityLogPageController extends homeGuardianClientController {
 
     @FXML
     public void initialize() {
-        // Bind table columns to ClientUser.ActivityEntry getters
+        // Bind columns to ActivityEntry getters: getDevice(), getActivity(), getDateTime()
         deviceColumn.setCellValueFactory(
                 new PropertyValueFactory<>("device")
         );
@@ -57,7 +56,6 @@ public class ActivityLogPageController extends homeGuardianClientController {
 
         activityTable.setItems(logData);
 
-        // Load initial logs from ClientUser
         loadLogs();
     }
 
@@ -70,7 +68,7 @@ public class ActivityLogPageController extends homeGuardianClientController {
             return;
         }
 
-        List<ClientUser.ActivityEntry> logs = user.getActivityLog();
+        java.util.List<ClientUser.ActivityEntry> logs = user.getActivityLog();
 
         if (logs == null || logs.isEmpty()) {
             System.out.println("ActivityLogPage: No logs available.");
@@ -81,12 +79,11 @@ public class ActivityLogPageController extends homeGuardianClientController {
         logData.setAll(logs);
     }
 
+    // ----------------- BUTTONS -----------------
 
     @FXML
     void refreshButtonPressed(ActionEvent event) {
-        // If needed, send request to server:
-        // sendToServer("getLogs");
-        // For now, just reload local cache:
+        // Just reload from ClientUser
         loadLogs();
     }
 

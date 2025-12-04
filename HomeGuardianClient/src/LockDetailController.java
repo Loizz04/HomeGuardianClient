@@ -117,7 +117,7 @@ public class LockDetailController extends homeGuardianClientController {
 
     private void sendLockDurationToServer(int minutes) {
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("setLockDuration");
+        msg.add("SET_LOCK_DURATION");
         msg.add(lockId);
         msg.add(minutes);
         sendToServer(msg);
@@ -133,7 +133,7 @@ public class LockDetailController extends homeGuardianClientController {
         styleToggle(linkToAlarmButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("linkLockToAlarm");
+        msg.add("LINK_LOCK_TO_ALARM");
         msg.add(lockId);
         msg.add(linked);
         sendToServer(msg);

@@ -97,7 +97,7 @@ public class cameraController extends homeGuardianClientController {
 
         // Send to server
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleCamera");
+        msg.add("TOGGLE_CAMERA");
         msg.add(cameraId);
         msg.add(on);
 

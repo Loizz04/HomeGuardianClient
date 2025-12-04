@@ -10,65 +10,108 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ActivityLogPageController">
-   <top>
-      <AnchorPane prefHeight="113.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="301.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Screenshot%202025-10-20%20095707.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-   </top>
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label layoutX="283.0" layoutY="15.0" prefHeight="38.0" prefWidth="234.0" text="ACTIVITY LOG" textFill="#4a4a4a">
-               <font>
-                  <Font name="Times New Roman" size="33.0" />
-               </font>
-            </Label>
-            <TableView layoutX="65.0" layoutY="71.0" prefHeight="251.0" prefWidth="673.0">
-              <columns>
-                <TableColumn prefWidth="176.0" text="Device" />
-                <TableColumn prefWidth="326.0" text="Activity" />
-                  <TableColumn prefWidth="170.0" text="Date/ Time" />
-              </columns>
-            </TableView>
-            <Button fx:id="refreshButton" layoutX="639.0" layoutY="16.0" mnemonicParsing="false" onAction="#refreshButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Refresh" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="14.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-   </center>
-   <bottom>
-      <AnchorPane prefHeight="90.0" prefWidth="800.0" style="-fx-background-color: #d18ee2; -fx-border-color: #ac6cbd; -fx-border-width: 8;" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="logoutButton" layoutX="667.0" layoutY="28.0" mnemonicParsing="false" onAction="#logoutButtonPressed" prefHeight="35.0" prefWidth="96.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Logout" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="mainMenuButton" layoutX="25.0" layoutY="28.0" mnemonicParsing="false" onAction="#mainMenuButtonPressed" prefHeight="35.0" prefWidth="91.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Main Menu" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="devicesButton" layoutX="125.0" layoutY="28.0" mnemonicParsing="false" onAction="#devicesButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Devices" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="settingsButton" layoutX="233.0" layoutY="28.0" mnemonicParsing="false" onAction="#settingsButtonPressed" prefHeight="35.0" prefWidth="99.0" style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;" text="Settings" textFill="WHITE">
-               <font>
-                  <Font name="Times New Roman" size="14.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-   </bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #D3D3D3;"
+            xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ActivityLogPageController">
+
+    <top>
+        <AnchorPane prefHeight="113.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="301.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@Screenshot%202025-10-20%20095707.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+    </top>
+
+    <center>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="283.0" layoutY="15.0" prefHeight="38.0" prefWidth="234.0"
+                       text="ACTIVITY LOG" textFill="#4a4a4a">
+                    <font>
+                        <Font name="Times New Roman" size="33.0" />
+                    </font>
+                </Label>
+
+                <!-- MAIN TABLE -->
+                <TableView fx:id="activityTable"
+                           layoutX="65.0" layoutY="71.0"
+                           prefHeight="251.0" prefWidth="673.0">
+                    <columns>
+                        <TableColumn fx:id="deviceColumn"
+                                     prefWidth="176.0" text="Device" />
+                        <TableColumn fx:id="activityColumn"
+                                     prefWidth="326.0" text="Activity" />
+                        <TableColumn fx:id="dateTimeColumn"
+                                     prefWidth="170.0" text="Date / Time" />
+                    </columns>
+                </TableView>
+
+                <Button fx:id="refreshButton" layoutX="639.0" layoutY="16.0"
+                        mnemonicParsing="false"
+                        onAction="#refreshButtonPressed"
+                        prefHeight="35.0" prefWidth="99.0"
+                        style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;"
+                        text="Refresh" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </center>
+
+    <bottom>
+        <AnchorPane prefHeight="90.0" prefWidth="800.0"
+                    style="-fx-background-color: #d18ee2; -fx-border-color: #ac6cbd; -fx-border-width: 8;"
+                    BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="logoutButton" layoutX="667.0" layoutY="28.0"
+                        mnemonicParsing="false" onAction="#logoutButtonPressed"
+                        prefHeight="35.0" prefWidth="96.0"
+                        style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;"
+                        text="Logout" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman" size="14.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="mainMenuButton" layoutX="25.0" layoutY="28.0"
+                        mnemonicParsing="false" onAction="#mainMenuButtonPressed"
+                        prefHeight="35.0" prefWidth="91.0"
+                        style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;"
+                        text="Main Menu" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman" size="14.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="devicesButton" layoutX="125.0" layoutY="28.0"
+                        mnemonicParsing="false" onAction="#devicesButtonPressed"
+                        prefHeight="35.0" prefWidth="99.0"
+                        style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;"
+                        text="Devices" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman" size="14.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="settingsButton" layoutX="233.0" layoutY="28.0"
+                        mnemonicParsing="false" onAction="#settingsButtonPressed"
+                        prefHeight="35.0" prefWidth="99.0"
+                        style="-fx-background-color: #ac6cbd; -fx-background-radius: 8px;"
+                        text="Settings" textFill="WHITE">
+                    <font>
+                        <Font name="Times New Roman" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </bottom>
 </BorderPane>

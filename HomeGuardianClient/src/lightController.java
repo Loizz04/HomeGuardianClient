@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import OCSF.ClientUser;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,6 +44,29 @@ public class lightController extends homeGuardianClientController {
     @FXML
     private Button settingsButton;
 
+    // ===================== INITIALIZE =====================
+
+    @FXML
+    public void initialize() {
+        styleToggle(light1ToggleButton);
+        styleToggle(light2ToggleButton);
+        styleToggle(light3ToggleButton);
+    }
+
+    private void styleToggle(ToggleButton button) {
+        if (button == null) return;
+
+        boolean on = button.isSelected();
+        if (on) {
+            button.setText("ON");
+            button.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        } else {
+            button.setText("OFF");
+            button.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
+        }
+    }
+
+    // ===================== LIGHT ICON CLICKS =====================
 
     @FXML
     void light1ButtonClicked(MouseEvent event) {
@@ -61,9 +86,15 @@ public class lightController extends homeGuardianClientController {
     private void openLightDetail(MouseEvent event, int lightId) {
         LightDetailController.setCurrentLightId(lightId);
         switchScene(event, "LightDetail.fxml");   // single shared FXML
+
+        // --- Log that user opened the detail page ---
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId, "Opened light detail page");
+        }
     }
 
-    // --------- Toggle buttons → on/off ---------
+    // ===================== TOGGLE BUTTONS (ON/OFF) =====================
 
     @FXML
     void light1ToggleButtonPressed(ActionEvent event) {
@@ -83,10 +114,9 @@ public class lightController extends homeGuardianClientController {
     private void handleLightToggle(int lightId, ToggleButton toggleButton) {
         boolean on = toggleButton.isSelected();
 
-        // --- Update button appearance ---
         if (on) {
             toggleButton.setText("ON");
-            toggleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"); 
+            toggleButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         } else {
             toggleButton.setText("OFF");
             toggleButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
@@ -94,14 +124,20 @@ public class lightController extends homeGuardianClientController {
 
         // --- Send to server ---
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleLight");
+        msg.add("TOGGLE_LIGHT");
         msg.add(lightId);
         msg.add(on);
-
         sendToServer(msg);
+
+        // --- Add to client-side activity log ---
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Light switched " + (on ? "ON" : "OFF"));
+        }
     }
 
-    // --------- Bottom navigation ---------
+    // ===================== NAVIGATION BUTTONS =====================
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -120,31 +156,19 @@ public class lightController extends homeGuardianClientController {
 
     @FXML
     void settingsButtonPressed(ActionEvent event) {
-    	switchScene(event, "settingsMenu.fxml");
+        switchScene(event, "settingsMenu.fxml");
     }
 
     @FXML
     void logoutButtonPressed(ActionEvent event) {
         sendToServer("logout");
+
+        // Optional: log logout on client side too
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("System", "User logged out");
+        }
+
         switchScene(event, "login.fxml");
     }
-    
-    @FXML
-    public void initialize() {
-        styleToggle(light1ToggleButton);
-        styleToggle(light2ToggleButton);
-        styleToggle(light3ToggleButton);
-    }
-
-    private void styleToggle(ToggleButton button) {
-        boolean on = button.isSelected();
-        if (on) {
-            button.setText("ON");
-            button.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
-        } else {
-            button.setText("OFF");
-            button.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
-        }
-    }
-
 }

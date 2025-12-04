@@ -6,7 +6,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.ImageView;
+
+import java.io.File;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+
 
 public class CameraDetailController extends homeGuardianClientController {
 
@@ -32,9 +37,6 @@ public class CameraDetailController extends homeGuardianClientController {
     private ComboBox<String> footageDropdown;
 
     @FXML
-    private ImageView footageview;
-
-    @FXML
     private Button logoutButton;
 
     @FXML
@@ -48,33 +50,41 @@ public class CameraDetailController extends homeGuardianClientController {
 
     @FXML
     private Button settingsButton;
+    
+    @FXML
+    private MediaView mediaView;
+
+    private MediaPlayer currentPlayer;
+
+    private final java.util.Map<String, String> footageFiles = new java.util.HashMap<>();
+
 
     // ================== INITIALIZE ==================
 
     @FXML
     public void initialize() {
-        // Set which camera this detail page is for
         cameraId = currentCameraId;
 
-        // Update title: "CAMERA 1", "CAMERA 2", etc.
         if (cameraTitleLabel != null) {
             cameraTitleLabel.setText("CAMERA " + cameraId);
         }
 
-        // Populate footage dropdown with sample options
+        // --- Only show the 2 real options ---
         if (footageDropdown != null) {
             footageDropdown.getItems().clear();
             footageDropdown.getItems().addAll(
                     "Live Feed",
-                    "Last Recording",
-                    "Recording 1",
-                    "Recording 2",
-                    "Recording 3"
+                    "Last Recording"
             );
             footageDropdown.setPromptText("Select Footage");
         }
 
-        // Style toggles based on initial selected state
+        footageFiles.clear();
+        footageFiles.put("Live Feed",
+                "C:\\Users\\Lois\\git\\HomeGuardianClient\\HomeGuardianClient\\src\\footage2.mp4");
+        footageFiles.put("Last Recording",
+                "C:\\Users\\Lois\\git\\HomeGuardianClient\\HomeGuardianClient\\src\\footage1.mp4");
+
         styleToggle(recordToggleButton);
         styleToggle(motionToggleButton);
     }
@@ -114,17 +124,43 @@ public class CameraDetailController extends homeGuardianClientController {
         String selected = footageDropdown.getValue();
         if (selected == null) return;
 
-        ArrayList<Object> msg = new ArrayList<>();
-        msg.add("getCameraFootage");
-        msg.add(cameraId);
-        msg.add(selected);
+        // Look up the file path for the chosen option
+        String path = footageFiles.get(selected);
+        if (path == null) {
+            System.out.println("No video mapped for: " + selected);
+            return;
+        }
 
-        sendToServer(msg);
+        // Stop previous video if it's playing
+        if (currentPlayer != null) {
+            currentPlayer.stop();
+            currentPlayer.dispose();
+            currentPlayer = null;
+        }
 
-        System.out.println("Requested footage '" + selected + "' for camera " + cameraId);
+        try {
+            // Convert Windows path -> URI -> Media
+            File file = new File(path);
+            String uri = file.toURI().toString();
 
-        // Later, when the server responds with an image/frame,
-        // you'll update 'footageview' in handleMessageFromServer().
+            Media media = new Media(uri);
+            currentPlayer = new MediaPlayer(media);
+            mediaView.setMediaPlayer(currentPlayer);
+            currentPlayer.play();
+
+            // tell the server what we requested
+            ArrayList<Object> msg = new ArrayList<>();
+            msg.add("REQUEST_CAMERA_FOOTAGE");
+            msg.add(cameraId);
+            msg.add(selected);  // "Live Feed" or "Last Recording"
+            sendToServer(msg);
+
+            System.out.println("Playing '" + selected + "' from " + path);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Could not load video: " + path);
+        }
     }
 
     // ================== TOGGLE BUTTONS ==================
@@ -135,7 +171,7 @@ public class CameraDetailController extends homeGuardianClientController {
         styleToggle(recordToggleButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleCameraRecording");
+        msg.add("TOGGLE_CAMERA_RECORDING");
         msg.add(cameraId);
         msg.add(on);
 
@@ -151,7 +187,7 @@ public class CameraDetailController extends homeGuardianClientController {
         styleToggle(motionToggleButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleCameraMotion");
+        msg.add("TOGGLE_CAMERA_MOTION");
         msg.add(cameraId);
         msg.add(on);
 
@@ -169,10 +205,10 @@ public class CameraDetailController extends homeGuardianClientController {
         boolean on = button.isSelected();
         if (on) {
             button.setText("Turn off");
-            button.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+            button.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
         } else {
             button.setText("Turn on");
-            button.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
+            button.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         }
     }
 }

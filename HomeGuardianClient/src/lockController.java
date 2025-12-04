@@ -102,7 +102,7 @@ public class lockController extends homeGuardianClientController {
         styleToggle(toggleButton);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleLock");
+        msg.add("TOGGLE_LOCK");
         msg.add(lockId);
         msg.add(engaged);
 

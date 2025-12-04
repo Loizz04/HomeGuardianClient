@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import OCSF.ClientUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +14,7 @@ import javafx.scene.paint.Color;
 
 public class LightDetailController extends homeGuardianClientController {
 
-    // set by Light Menu before loading this scene
+    // Set by lightController before loading this scene
     private static int currentLightId = 1;
 
     private int lightId = 1;
@@ -23,7 +24,7 @@ public class LightDetailController extends homeGuardianClientController {
     }
 
     @FXML
-    private Label lightTitleLabel;           // label that says "LIGHT 1", "LIGHT 2", etc.
+    private Label lightTitleLabel;           // "LIGHT 1", "LIGHT 2", ...
 
     @FXML
     private Button activityLogButton;
@@ -64,27 +65,19 @@ public class LightDetailController extends homeGuardianClientController {
     @FXML
     private TextField timeoutTextField;
 
-    // ---------------- INIT ----------------
+    // ================== INITIALIZE ==================
 
     @FXML
     public void initialize() {
-        // Decide which light this screen is for by reading the title text
-        if (lightTitleLabel != null && lightTitleLabel.getText() != null) {
-            String t = lightTitleLabel.getText().toLowerCase();
-            if (t.contains("1")) {
-                lightId = 1;
-            } else if (t.contains("2")) {
-                lightId = 2;
-            } else if (t.contains("3")) {
-                lightId = 3;
-            }
-        }
+        // Use the ID passed in from the light menu
+        lightId = currentLightId;
 
-        // Optional: set initial button text
-        motionToggleButton.setText(motionToggleButton.isSelected() ? "Turn off" : "Turn on");
+        if (lightTitleLabel != null) {
+            lightTitleLabel.setText("LIGHT " + lightId);
+        }
     }
 
-    // ------------- NAVIGATION BUTTONS -------------
+    // ================== NAV BUTTONS ==================
 
     @FXML
     void activityLogButtonPressed(ActionEvent event) {
@@ -93,7 +86,6 @@ public class LightDetailController extends homeGuardianClientController {
 
     @FXML
     void devicesButtonPressed(ActionEvent event) {
-        // back to overall light menu (or DevicesPage – your choice)
         switchScene(event, "deviceMenu.fxml");
     }
 
@@ -104,7 +96,7 @@ public class LightDetailController extends homeGuardianClientController {
 
     @FXML
     void settingsButtonPressed(ActionEvent event) {
-    	switchScene(event, "settingsMenu.fxml");
+        switchScene(event, "settingsMenu.fxml");
     }
 
     @FXML
@@ -113,12 +105,19 @@ public class LightDetailController extends homeGuardianClientController {
         switchScene(event, "login.fxml");
     }
 
+    // ================== BRIGHTNESS ==================
 
     @FXML
     void brightnessSliderMoved(MouseEvent event) {
         int value = (int) brightnessSlider.getValue();
         brightnessTextField.setText(Integer.toString(value));
         sendBrightnessToServer(value);
+
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Brightness set to " + value + "%");
+        }
     }
 
     @FXML
@@ -129,6 +128,12 @@ public class LightDetailController extends homeGuardianClientController {
             if (value > 100) value = 100;
             brightnessSlider.setValue(value);
             sendBrightnessToServer(value);
+
+            ClientUser user = getClientUser();
+            if (user != null) {
+                user.addActivity("Light " + lightId,
+                        "Brightness set to " + value + "% (typed)");
+            }
         } catch (NumberFormatException e) {
             brightnessTextField.setText(Integer.toString((int) brightnessSlider.getValue()));
         }
@@ -136,13 +141,13 @@ public class LightDetailController extends homeGuardianClientController {
 
     private void sendBrightnessToServer(int value) {
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("setLightBrightness");
+        msg.add("SET_LIGHT_BRIGHTNESS");
         msg.add(lightId);
         msg.add(value);   // 0–100 %
         sendToServer(msg);
     }
 
-    // ------------- COLOR -------------
+    // ================== COLOUR ==================
 
     @FXML
     void colorPickerChanged(ActionEvent event) {
@@ -152,21 +157,33 @@ public class LightDetailController extends homeGuardianClientController {
         int b = (int) (color.getBlue() * 255);
 
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("setLightColor");
+        msg.add("SET_LIGHT_COLOR");
         msg.add(lightId);
         msg.add(r);
         msg.add(g);
         msg.add(b);
         sendToServer(msg);
+
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Colour changed to RGB(" + r + "," + g + "," + b + ")");
+        }
     }
 
-    // ------------- TIMEOUT -------------
+    // ================== TIMEOUT ==================
 
     @FXML
     void timeoutSliderMoved(MouseEvent event) {
         int minutes = (int) timeoutSlider.getValue();
         timeoutTextField.setText(Integer.toString(minutes));
         sendTimeoutToServer(minutes);
+
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Timeout set to " + minutes + " minutes");
+        }
     }
 
     @FXML
@@ -176,6 +193,12 @@ public class LightDetailController extends homeGuardianClientController {
             if (minutes < 0) minutes = 0;
             timeoutSlider.setValue(minutes);
             sendTimeoutToServer(minutes);
+
+            ClientUser user = getClientUser();
+            if (user != null) {
+                user.addActivity("Light " + lightId,
+                        "Timeout set to " + minutes + " minutes (typed)");
+            }
         } catch (NumberFormatException e) {
             timeoutTextField.setText(Integer.toString((int) timeoutSlider.getValue()));
         }
@@ -183,31 +206,56 @@ public class LightDetailController extends homeGuardianClientController {
 
     private void sendTimeoutToServer(int minutes) {
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("setLightTimeout");
+        msg.add("SET_LIGHT_TIMEOUT");
         msg.add(lightId);
         msg.add(minutes);
         sendToServer(msg);
     }
 
-    // ------------- MOTION SENSOR -------------
+    // ================== MOTION ON/OFF ==================
 
     @FXML
     void motionToggleButtonPressed(ActionEvent event) {
         boolean on = motionToggleButton.isSelected();
-        motionToggleButton.setText(on ? "Turn off" : "Turn on");
 
+        // Update button look
+        if (on) {
+            motionToggleButton.setText("Turn off");
+            motionToggleButton.setStyle(
+                    "-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-weight: bold;");
+        } else {
+            motionToggleButton.setText("Turn on");
+            motionToggleButton.setStyle(
+                    "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        }
+
+        // Build message to send to server
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("toggleMotionSensor");
+        msg.add("SET_LIGHT_MOTION_LINK");
         msg.add(lightId);
         msg.add(on);
         sendToServer(msg);
+
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Motion sensor turned " + (on ? "ON" : "OFF"));
+        }
     }
+
+    // ================== MOTION SENSITIVITY ==================
 
     @FXML
     void motionSensitivitySliderMoved(MouseEvent event) {
         int value = (int) motionSensitivitySlider.getValue();
         motionSensitivityField.setText(Integer.toString(value));
         sendMotionSensitivityToServer(value);
+
+        ClientUser user = getClientUser();
+        if (user != null) {
+            user.addActivity("Light " + lightId,
+                    "Motion sensitivity set to " + value + "%");
+        }
     }
 
     @FXML
@@ -218,16 +266,23 @@ public class LightDetailController extends homeGuardianClientController {
             if (value > 100) value = 100;
             motionSensitivitySlider.setValue(value);
             sendMotionSensitivityToServer(value);
+
+            ClientUser user = getClientUser();
+            if (user != null) {
+                user.addActivity("Light " + lightId,
+                        "Motion sensitivity set to " + value + "% (typed)");
+            }
         } catch (NumberFormatException e) {
-            motionSensitivityField.setText(Integer.toString((int) motionSensitivitySlider.getValue()));
+            motionSensitivityField.setText(
+                    Integer.toString((int) motionSensitivitySlider.getValue()));
         }
     }
 
     private void sendMotionSensitivityToServer(int value) {
         ArrayList<Object> msg = new ArrayList<>();
-        msg.add("setMotionSensitivity");
-        msg.add(lightId);
-        msg.add(value);   // 0–100 %
+        msg.add("SET_MOTION_SENSITIVITY");
+        // IMPORTANT: server expects only the value at index 1
+        msg.add(value);
         sendToServer(msg);
     }
 }

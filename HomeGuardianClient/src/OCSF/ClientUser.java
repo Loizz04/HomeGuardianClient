@@ -2,18 +2,19 @@ package OCSF;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-
+import java.text.SimpleDateFormat;
 
 /**
  * ClientUser
  *
- * This class lives on the CLIENT side only.  It stores a snapshot of the
+ * This class lives on the CLIENT side only. It stores a snapshot of the
  * logged-in user's information and the current state of all devices that
  * the UI needs to display.
  *
  * All JavaFX controllers should read/write state via this class instead of
- * talking directly to the network layer.  The HomeGuardianClient is
+ * talking directly to the network layer. The HomeGuardianClient is
  * responsible for updating this object when the server sends new data.
  *
  * NOTE:
@@ -23,30 +24,22 @@ import java.util.List;
  */
 public class ClientUser {
 
-    // ---------------------------------------------------------------------
-    // Constants – how many of each device type the client UI supports
-    // ---------------------------------------------------------------------
     public static final int NUM_LIGHTS  = 3;
     public static final int NUM_CAMERAS = 3;
     public static final int NUM_ALARMS  = 3;
     public static final int NUM_LOCKS   = 2;
 
-    // ---------------------------------------------------------------------
-    // Basic user info
-    // ---------------------------------------------------------------------
     private int    userId;
     private String username;
     private String name;
     private String email;
     private boolean notificationsEnabled;
 
-    // ---------------------------------------------------------------------
-    // Nested value types representing the state of each device
-    // ---------------------------------------------------------------------
+    // ==========================================================
+    //  DEVICE STATE INNER CLASSES
+    // ==========================================================
 
-    /**
-     * Represents the local state of a SmartLight.
-     */
+    // ------------ Lights ------------
     public static class LightState {
         private boolean present;
         private boolean on;
@@ -66,74 +59,43 @@ public class ClientUser {
             this.timeoutMinutes = 0;
         }
 
-        // --- getters / setters ---
+        public boolean isPresent() { return present; }
+        public void setPresent(boolean present) { this.present = present; }
 
-        public boolean isPresent() {
-            return present;
-        }
+        public boolean isOn() { return on; }
+        public void setOn(boolean on) { this.on = on; }
 
-        public void setPresent(boolean present) {
-            this.present = present;
-        }
-
-        public boolean isOn() {
-            return on;
-        }
-
-        public void setOn(boolean on) {
-            this.on = on;
-        }
-
-        public int getBrightness() {
-            return brightness;
-        }
-
+        public int getBrightness() { return brightness; }
         public void setBrightness(int brightness) {
             this.brightness = Math.max(0, Math.min(100, brightness));
         }
 
-        public String getColour() {
-            return colour;
-        }
+        public String getColour() { return colour; }
+        public void setColour(String colour) { this.colour = colour; }
 
-        public void setColour(String colour) {
-            this.colour = colour;
-        }
-
-        public boolean isMotionEnabled() {
-            return motionEnabled;
-        }
-
+        public boolean isMotionEnabled() { return motionEnabled; }
         public void setMotionEnabled(boolean motionEnabled) {
             this.motionEnabled = motionEnabled;
         }
 
-        public int getMotionSensitivity() {
-            return motionSensitivity;
-        }
-
+        public int getMotionSensitivity() { return motionSensitivity; }
         public void setMotionSensitivity(int motionSensitivity) {
             this.motionSensitivity = Math.max(0, Math.min(100, motionSensitivity));
         }
 
-        public int getTimeoutMinutes() {
-            return timeoutMinutes;
-        }
-
+        public int getTimeoutMinutes() { return timeoutMinutes; }
         public void setTimeoutMinutes(int timeoutMinutes) {
             this.timeoutMinutes = Math.max(0, timeoutMinutes);
         }
     }
 
-    /**
-     * Represents the local state of a SecurityCamera.
-     */
+    // ------------ Cameras ------------
     public static class CameraState {
         private boolean present;
-        private boolean on;               // powered / streaming
+        private boolean on;
         private boolean recording;
         private boolean motionEnabled;
-        private String  selectedFootage;  // label of selected clip, if any
+        private String  selectedFootage;
 
         public CameraState() {
             this.present = false;
@@ -143,50 +105,27 @@ public class ClientUser {
             this.selectedFootage = null;
         }
 
-        public boolean isPresent() {
-            return present;
-        }
+        public boolean isPresent() { return present; }
+        public void setPresent(boolean present) { this.present = present; }
 
-        public void setPresent(boolean present) {
-            this.present = present;
-        }
+        public boolean isOn() { return on; }
+        public void setOn(boolean on) { this.on = on; }
 
-        public boolean isOn() {
-            return on;
-        }
+        public boolean isRecording() { return recording; }
+        public void setRecording(boolean recording) { this.recording = recording; }
 
-        public void setOn(boolean on) {
-            this.on = on;
-        }
-
-        public boolean isRecording() {
-            return recording;
-        }
-
-        public void setRecording(boolean recording) {
-            this.recording = recording;
-        }
-
-        public boolean isMotionEnabled() {
-            return motionEnabled;
-        }
-
+        public boolean isMotionEnabled() { return motionEnabled; }
         public void setMotionEnabled(boolean motionEnabled) {
             this.motionEnabled = motionEnabled;
         }
 
-        public String getSelectedFootage() {
-            return selectedFootage;
-        }
-
+        public String getSelectedFootage() { return selectedFootage; }
         public void setSelectedFootage(String selectedFootage) {
             this.selectedFootage = selectedFootage;
         }
     }
 
-    /**
-     * Represents the local state of an Alarm.
-     */
+    // ------------ Alarms ------------
     public static class AlarmState {
         private boolean present;
         private boolean motionEnabled;
@@ -198,34 +137,21 @@ public class ClientUser {
             this.recordOnCamera = false;
         }
 
-        public boolean isPresent() {
-            return present;
-        }
+        public boolean isPresent() { return present; }
+        public void setPresent(boolean present) { this.present = present; }
 
-        public void setPresent(boolean present) {
-            this.present = present;
-        }
-
-        public boolean isMotionEnabled() {
-            return motionEnabled;
-        }
-
+        public boolean isMotionEnabled() { return motionEnabled; }
         public void setMotionEnabled(boolean motionEnabled) {
             this.motionEnabled = motionEnabled;
         }
 
-        public boolean isRecordOnCamera() {
-            return recordOnCamera;
-        }
-
+        public boolean isRecordOnCamera() { return recordOnCamera; }
         public void setRecordOnCamera(boolean recordOnCamera) {
             this.recordOnCamera = recordOnCamera;
         }
     }
 
-    /**
-     * Represents the local state of a SmartLock.
-     */
+    // ------------ Locks ------------
     public static class LockState {
         private boolean present;
         private boolean engaged;          // true = locked
@@ -239,71 +165,51 @@ public class ClientUser {
             this.linkedToAlarm = false;
         }
 
-        public boolean isPresent() {
-            return present;
-        }
+        public boolean isPresent() { return present; }
+        public void setPresent(boolean present) { this.present = present; }
 
-        public void setPresent(boolean present) {
-            this.present = present;
-        }
+        public boolean isEngaged() { return engaged; }
+        public void setEngaged(boolean engaged) { this.engaged = engaged; }
 
-        public boolean isEngaged() {
-            return engaged;
-        }
-
-        public void setEngaged(boolean engaged) {
-            this.engaged = engaged;
-        }
-
-        public int getLockDuration() {
-            return lockDuration;
-        }
-
+        public int getLockDuration() { return lockDuration; }
         public void setLockDuration(int lockDuration) {
             this.lockDuration = Math.max(0, lockDuration);
         }
 
-        public boolean isLinkedToAlarm() {
-            return linkedToAlarm;
-        }
-
+        public boolean isLinkedToAlarm() { return linkedToAlarm; }
         public void setLinkedToAlarm(boolean linkedToAlarm) {
             this.linkedToAlarm = linkedToAlarm;
         }
     }
 
+    // ==========================================================
+    //  CLIENT-SIDE ACTIVITY LOG + NOTIFICATIONS
+    // ==========================================================
+
     /**
      * Simple value object for a single activity log entry as displayed
      * on the Activity Log screen.
      */
-
     public static class ActivityEntry {
         private final String device;
         private final String activity;
-        private final String dateTime;
+        private final String dateTime;   // formatted, e.g. "2025-12-04 09:35:12"
 
-        public ActivityEntry(String device, String activity, String dateTime) {
+        public ActivityEntry(String device, String activity) {
             this.device = device;
             this.activity = activity;
-            this.dateTime = dateTime;
+
+            SimpleDateFormat fmt =
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            this.dateTime = fmt.format(new Date());
         }
 
-        public String getDevice() {
-            return device;
-        }
-
-        public String getActivity() {
-            return activity;
-        }
-
-        public String getDateTime() {
-            return dateTime;
-        }
+        public String getDevice()   { return device; }
+        public String getActivity() { return activity; }
+        public String getDateTime() { return dateTime; }
     }
 
-    /**
-     * Simple value object for notifications belonging to this user.
-     */
+    /** Simple value object for notifications belonging to this user. */
     public static class NotificationEntry {
         private final String message;
         private final long   timestamp;
@@ -315,38 +221,27 @@ public class ClientUser {
             this.read = false;
         }
 
-        public String getMessage() {
-            return message;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        public boolean isRead() {
-            return read;
-        }
-
-        public void markRead() {
-            this.read = true;
-        }
+        public String getMessage() { return message; }
+        public long getTimestamp() { return timestamp; }
+        public boolean isRead() { return read; }
+        public void markRead() { this.read = true; }
     }
 
-    // ---------------------------------------------------------------------
-    // Collections of device states, activity log, notifications
-    // ---------------------------------------------------------------------
+    // ==========================================================
+    //  FIELDS
+    // ==========================================================
+
     private final List<LightState>        lights        = new ArrayList<>();
     private final List<CameraState>       cameras       = new ArrayList<>();
     private final List<AlarmState>        alarms        = new ArrayList<>();
     private final List<LockState>         locks         = new ArrayList<>();
     private final List<ActivityEntry>     activityLog   = new ArrayList<>();
     private final List<NotificationEntry> notifications = new ArrayList<>();
-    
 
+    // ==========================================================
+    //  CONSTRUCTORS
+    // ==========================================================
 
-    // ---------------------------------------------------------------------
-    // Constructors
-    // ---------------------------------------------------------------------
     public ClientUser() {
         this(-1, null, null, null);
     }
@@ -373,53 +268,30 @@ public class ClientUser {
         }
     }
 
-    // ---------------------------------------------------------------------
-    // Basic user info getters/setters
-    // ---------------------------------------------------------------------
+    // ==========================================================
+    //  BASIC USER INFO
+    // ==========================================================
 
-    public int getUserId() {
-        return userId;
-    }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isNotificationsEnabled() {
-        return notificationsEnabled;
-    }
-
+    public boolean isNotificationsEnabled() { return notificationsEnabled; }
     public void setNotificationsEnabled(boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
     }
 
-    // ---------------------------------------------------------------------
-    // Device state access helpers
-    // ---------------------------------------------------------------------
+    // ==========================================================
+    //  DEVICE STATE ACCESS HELPERS
+    // ==========================================================
 
     // Lights
     public List<LightState> getLights() {
@@ -427,7 +299,6 @@ public class ClientUser {
     }
 
     public LightState getLight(int lightId) {
-        // lightId is 1-based in UI
         if (lightId < 1 || lightId > NUM_LIGHTS) {
             throw new IllegalArgumentException("Invalid lightId: " + lightId);
         }
@@ -470,10 +341,16 @@ public class ClientUser {
         return locks.get(lockId - 1);
     }
 
-    // ---------------------------------------------------------------------
-    // Activity log & notifications
-    // ---------------------------------------------------------------------
+    // ==========================================================
+    //  ACTIVITY LOG (CLIENT-SIDE ONLY)
+    // ==========================================================
 
+    /** Add a new entry to this user's activity log. */
+    public void addActivity(String device, String activity) {
+        activityLog.add(new ActivityEntry(device, activity));
+    }
+
+    /** Read-only access for ActivityLogPageController. */
     public List<ActivityEntry> getActivityLog() {
         return Collections.unmodifiableList(activityLog);
     }
@@ -482,16 +359,9 @@ public class ClientUser {
         activityLog.clear();
     }
 
-    public void addActivityEntry(String device, String activity, String dateTime) {
-        activityLog.add(new ActivityEntry(device, activity, dateTime));
-    }
-
-    public void setActivityLogEntries(List<ActivityEntry> entries) {
-        activityLog.clear();
-        if (entries != null) {
-            activityLog.addAll(entries);
-        }
-    }
+    // ==========================================================
+    //  NOTIFICATIONS
+    // ==========================================================
 
     public List<NotificationEntry> getNotifications() {
         return Collections.unmodifiableList(notifications);
